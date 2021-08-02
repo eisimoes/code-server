@@ -90,7 +90,9 @@ RUN echo "**** Setting up repositories ****" \
     && echo "ALL ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd \
     && mkdir -p /etc/fixuid \
     && printf "user: coder\ngroup: coder\n" > /etc/fixuid/config.yml \
-    && chmod a+s /usr/bin/fixuid
+    && chmod a+s /usr/bin/fixuid \
+    && mkdir -p /workspace \
+    && chown coder.coder /workspace
 
 COPY entrypoint.sh /usr/bin/entrypoint.sh
 
@@ -108,4 +110,4 @@ ENV SHELL=/bin/bash
 
 ENTRYPOINT ["/usr/bin/entrypoint.sh"]
 
-CMD ["--bind-addr", "0.0.0.0:8080", "--auth", "none"]
+CMD ["--bind-addr", "0.0.0.0:8080", "--auth", "none", "/workspace"]
