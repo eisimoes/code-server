@@ -6,11 +6,6 @@ if [[ ! $(whoami 2> /dev/null) ]]; then
     fixuid -q > /dev/null
 fi
 
-if [[ "$TZ" ]]; then
-    echo "$TZ" | sudo tee /etc/timezone > /dev/null
-    sudo dpkg-reconfigure --frontend noninteractive tzdata > /dev/null 2> /dev/null
-fi
-
 export USER="$(whoami)"
 
 if [[ -d "/home/$(eval echo ~$USER)" ]]; then
