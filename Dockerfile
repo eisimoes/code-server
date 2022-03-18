@@ -1,4 +1,4 @@
-FROM debian:buster-slim AS fixuid-builder
+FROM debian:bullseye-slim AS fixuid-builder
 
 WORKDIR /tmp
 
@@ -18,7 +18,7 @@ RUN echo "**** Setting up repositories ****" \
     && echo "**** Building fixuid" \
     && go build
 
-FROM debian:buster-slim
+FROM debian:bullseye-slim
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -45,7 +45,7 @@ RUN echo "**** Setting up repositories ****" \
         gnupg \
         wget \
     && wget -qO - https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
-    && echo 'deb https://deb.nodesource.com/node_14.x buster main' \
+    && echo 'deb https://deb.nodesource.com/node_14.x bullseye main' \
         > /etc/apt/sources.list.d/nodesource.list \
     && wget -qO - https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
     && echo 'deb https://dl.yarnpkg.com/debian/ stable main' \
