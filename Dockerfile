@@ -67,7 +67,6 @@ RUN echo "**** Setting up repositories ****" \
         nodejs \
         openssh-client \
         python3 \
-        python3-venv \
         sudo \
         yarn \
     && npm config set python python3 \
