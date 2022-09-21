@@ -1,4 +1,4 @@
-FROM debian:buster-slim AS fixuid-builder
+FROM debian:bullseye-slim AS fixuid-builder
 
 WORKDIR /tmp
 
@@ -18,7 +18,7 @@ RUN echo "**** Setting up repositories ****" \
     && echo "**** Building fixuid" \
     && go build
 
-FROM debian:buster-slim
+FROM debian:bullseye-slim
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -43,19 +43,18 @@ RUN echo "**** Setting up repositories ****" \
     && apt-get install -y --no-install-recommends \
         ca-certificates \
         gnupg \
-        wget \
-    && wget -qO - https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
-    && echo 'deb https://deb.nodesource.com/node_14.x buster main' \
+        curl \
+    && curl -L https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
+    && echo 'deb https://deb.nodesource.com/node_16.x bullseye main' \
         > /etc/apt/sources.list.d/nodesource.list \
-    && wget -qO - https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+    && curl -L https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
     && echo 'deb https://dl.yarnpkg.com/debian/ stable main' \
         > /etc/apt/sources.list.d/yarn.list \
     && echo "**** Installing build dependencies ****" \
     && apt-get update \
     && apt-get install -y \
         build-essential \
-        libx11-dev \
-        libxkbfile-dev \
+        libsecret-1-0 \
         libsecret-1-dev \
         pkg-config \
     && echo "**** Installing packages ****" \
@@ -67,19 +66,17 @@ RUN echo "**** Setting up repositories ****" \
         nodejs \
         openssh-client \
         python3 \
+	python3-pip \
+        python3-venv \
         sudo \
-        yarn \
     && npm config set python python3 \
     && echo "**** Installing Code Server ****" \
-    && yarn --production --frozen-lockfile global add code-server@${CODE_RELEASE} --unsafe-perm \
+    && npm install --global code-server --unsafe-perm --legacy-peer-deps \
     && echo "**** Cleaning up ****" \
     && apt-get purge --auto-remove -y \
         build-essential \
         pkg-config \
-        libx11-dev \
-        libxkbfile-dev \
-        libsecret-1-dev \
-    && yarn cache clean \
+    && npm cache clean -force \
     && apt-get clean \
     && rm -rf \
         /tmp/* \
