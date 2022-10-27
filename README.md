@@ -68,4 +68,4 @@ Based on <https://github.com/linuxserver/docker-code-server>.
 ## License
 
 - eisimoes/code-server: [MIT License](./LICENSE)
--  cdr/code-server : [MIT License](https://github.com/cdr/code-server/blob/main/LICENSE.txt)
+- cdr/code-server : [MIT License](https://github.com/cdr/code-server/blob/main/LICENSE)
