@@ -107,4 +107,4 @@ ENV SHELL=/bin/bash
 
 ENTRYPOINT ["/usr/bin/entrypoint.sh"]
 
-CMD ["--bind-addr", "0.0.0.0:8080", "--auth", "none", "/workspace"]
+CMD ["--bind-addr", "0.0.0.0:8080", "--auth", "none", "--disable-telemetry", "/workspace"]
