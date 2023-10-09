@@ -18,6 +18,8 @@ ARG APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=True
 
 ARG CODE_RELEASE
 
+ENV NODE_GYP_FORCE_PYTHON=/usr/bin/python3
+
 LABEL org.opencontainers.image.title="Code Server"
 LABEL org.opencontainers.image.description="VS Code in the browser"
 LABEL org.opencontainers.image.authors="Eduardo Simoes <eisimoes@yahoo.com>"
