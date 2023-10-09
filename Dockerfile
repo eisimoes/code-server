@@ -1,24 +1,16 @@
-FROM debian:bullseye-slim AS fixuid-builder
+FROM golang:1.21-bookworm AS fixuid-builder
 
 WORKDIR /tmp
 
-ARG DEBIAN_FRONTEND=noninteractive
-
 ARG APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=True
 
-RUN echo "**** Setting up repositories ****" \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends \
-        ca-certificates \
-        git \
-        golang-go \
-    && echo "**** Cloning fixuid repository ****" \
+RUN echo "**** Cloning fixuid repository ****" \
     && git clone https://github.com/boxboat/fixuid.git \
     && cd fixuid \
     && echo "**** Building fixuid" \
     && go build
 
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -44,12 +36,11 @@ RUN echo "**** Setting up repositories ****" \
         ca-certificates \
         gnupg \
         curl \
-    && curl -L https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
-    && echo 'deb https://deb.nodesource.com/node_16.x bullseye main' \
+    && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key \
+        | gpg --dearmor \
+        | tee /etc/apt/trusted.gpg.d/nodesource.gpg > /dev/null \
+    && echo 'deb https://deb.nodesource.com/node_18.x bookworm main' \
         > /etc/apt/sources.list.d/nodesource.list \
-    && curl -L https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
-    && echo 'deb https://dl.yarnpkg.com/debian/ stable main' \
-        > /etc/apt/sources.list.d/yarn.list \
     && echo "**** Installing build dependencies ****" \
     && apt-get update \
     && apt-get install -y \
@@ -69,7 +60,6 @@ RUN echo "**** Setting up repositories ****" \
 	python3-pip \
         python3-venv \
         sudo \
-    && npm config set python python3 \
     && echo "**** Installing Code Server ****" \
     && npm install --global code-server --unsafe-perm --legacy-peer-deps \
     && echo "**** Cleaning up ****" \
