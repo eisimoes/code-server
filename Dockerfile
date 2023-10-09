@@ -49,6 +49,7 @@ RUN echo "**** Setting up repositories ****" \
         build-essential \
         libsecret-1-0 \
         libsecret-1-dev \
+        libkrb5-dev \
         pkg-config \
     && echo "**** Installing packages ****" \
     && apt-get install -y --no-install-recommends \
@@ -67,6 +68,8 @@ RUN echo "**** Setting up repositories ****" \
     && echo "**** Cleaning up ****" \
     && apt-get purge --auto-remove -y \
         build-essential \
+        libsecret-1-dev \
+        libkrb5-dev \
         pkg-config \
     && npm cache clean -force \
     && apt-get clean \
