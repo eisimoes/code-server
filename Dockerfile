@@ -47,6 +47,7 @@ RUN echo "**** Setting up repositories ****" \
     && apt-get update \
     && apt-get install -y \
         build-essential \
+        libatomic1 \
         libsecret-1-0 \
         libsecret-1-dev \
         libkrb5-dev \
