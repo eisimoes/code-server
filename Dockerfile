@@ -64,6 +64,7 @@ RUN echo "**** Setting up repositories ****" \
         python3-venv \
         sudo \
     && echo "**** Installing Code Server ****" \
+    && npm config set registry http://registry.npmjs.org/ \
     && npm install --global code-server --unsafe-perm --legacy-peer-deps \
     && echo "**** Cleaning up ****" \
     && apt-get purge --auto-remove -y \
