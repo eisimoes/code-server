@@ -63,6 +63,7 @@ RUN echo "**** Setting up repositories ****" \
         python3 \
 	python3-pip \
         python3-venv \
+        python-is-python3 \
         sudo \
     && echo "**** Installing Code Server ****" \
     && npm install --global code-server --unsafe-perm --legacy-peer-deps --maxsockets 1 \
