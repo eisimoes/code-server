@@ -39,7 +39,7 @@ RUN echo "**** Setting up repositories ****" \
         curl \
     && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key \
         -o /etc/apt/trusted.gpg.d/nodesource.asc \
-    && echo 'deb https://deb.nodesource.com/node_18.x nodistro main' \
+    && echo 'deb https://deb.nodesource.com/node_20.x nodistro main' \
         > /etc/apt/sources.list.d/nodesource.list \
     && printf 'Package: *\nPin: origin deb.nodesource.com\nPin-Priority: 1001' \
         > /etc/apt/preferences.d/nodesource \
