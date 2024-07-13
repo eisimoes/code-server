@@ -1,4 +1,4 @@
-FROM golang:1.21-bookworm AS fixuid-builder
+FROM golang:1.22.5-bookworm AS fixuid-builder
 
 WORKDIR /tmp
 
@@ -66,7 +66,7 @@ RUN echo "**** Setting up repositories ****" \
         python-is-python3 \
         sudo \
     && echo "**** Installing Code Server ****" \
-    && npm install --global code-server --unsafe-perm --legacy-peer-deps --maxsockets 1 \
+    && npm install --global code-server@v$CODE_RELEASE --unsafe-perm --legacy-peer-deps --maxsockets 1 \
     && echo "**** Cleaning up ****" \
     && apt-get purge --auto-remove -y \
         build-essential \
