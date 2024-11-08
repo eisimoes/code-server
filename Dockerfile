@@ -2,8 +2,6 @@ FROM golang:1.22.5-bookworm AS fixuid-builder
 
 WORKDIR /tmp
 
-ARG APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=True
-
 RUN echo "**** Cloning fixuid repository ****" \
     && git clone https://github.com/boxboat/fixuid.git \
     && cd fixuid \
@@ -12,13 +10,9 @@ RUN echo "**** Cloning fixuid repository ****" \
 
 FROM debian:bookworm-slim
 
-ARG DEBIAN_FRONTEND=noninteractive
-
-ARG APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=True
-
 ARG CODE_RELEASE
 
-ENV NODE_GYP_FORCE_PYTHON=/usr/bin/python3
+ENV DEBIAN_FRONTEND=noninteractive
 
 LABEL org.opencontainers.image.title="Code Server"
 LABEL org.opencontainers.image.description="VS Code in the browser"
@@ -32,33 +26,15 @@ RUN : "${CODE_RELEASE:?The argument CODE_RELEASE is mandatory.}"
 
 COPY --from=fixuid-builder /tmp/fixuid/fixuid /usr/bin/fixuid
 
-RUN echo "**** Setting up repositories ****" \
+RUN echo "**** Installing packages ****" \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
         ca-certificates \
         curl \
-    && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key \
-        -o /etc/apt/trusted.gpg.d/nodesource.asc \
-    && echo 'deb https://deb.nodesource.com/node_20.x nodistro main' \
-        > /etc/apt/sources.list.d/nodesource.list \
-    && printf 'Package: *\nPin: origin deb.nodesource.com\nPin-Priority: 1001' \
-        > /etc/apt/preferences.d/nodesource \
-    && echo "**** Installing build dependencies ****" \
-    && apt-get update \
-    && apt-get install -y \
-        build-essential \
-        libatomic1 \
-        libsecret-1-0 \
-        libsecret-1-dev \
-        libkrb5-dev \
-        pkg-config \
-    && echo "**** Installing packages ****" \
-    && apt-get install -y --no-install-recommends \
         dumb-init \
         git \
         iproute2 \
         jq \
-        nodejs \
         openssh-client \
         python3 \
 	python3-pip \
@@ -66,14 +42,7 @@ RUN echo "**** Setting up repositories ****" \
         python-is-python3 \
         sudo \
     && echo "**** Installing Code Server ****" \
-    && npm install --global code-server@v$CODE_RELEASE --unsafe-perm --legacy-peer-deps --maxsockets 1 \
-    && echo "**** Cleaning up ****" \
-    && apt-get purge --auto-remove -y \
-        build-essential \
-        libsecret-1-dev \
-        libkrb5-dev \
-        pkg-config \
-    && npm cache clean -force \
+    && curl -fsSL https://code-server.dev/install.sh | sh \
     && apt-get clean \
     && rm -rf \
         /tmp/* \

@@ -17,4 +17,4 @@ echo "$USER ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers.d/nopasswd > /dev
 
 sudo sed -i "/^ALL/d" /etc/sudoers.d/nopasswd
 
-exec dumb-init /usr/bin/node /usr/bin/code-server "$@"
+exec dumb-init /usr/bin/code-server "$@"
