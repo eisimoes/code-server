@@ -67,8 +67,6 @@ WORKDIR /
 
 EXPOSE 8080/tcp
 
-EXPOSE 8443/tcp
-
 ENV SHELL=/bin/bash
 
 ENTRYPOINT ["/usr/bin/entrypoint.sh"]
