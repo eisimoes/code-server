@@ -8,7 +8,7 @@ RUN echo "**** Cloning fixuid repository ****" \
     && echo "**** Building fixuid" \
     && go build
 
-FROM debian:bookworm-slim
+FROM debian:trixie-slim
 
 ARG CODE_RELEASE
 
